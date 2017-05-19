@@ -1,5 +1,6 @@
 import logging
 import scrapy
+import datetime
 
 
 class QuotesSpider(scrapy.Spider):
@@ -17,10 +18,10 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         logging.info('Inside the parse function')
         # full_text = response.body
-        date = datetime.datetime.today().strftime('%Y-%m-%d')
+        date = datetime.datetime.today().strftime('-%Y-%m-%d')
         site = response.url.split("/")[-1]
         site_date = site + date
-        filename = 'twitter-crawl-%s.html' % site_date
+        filename = '%s-twitter-crawl.html' % site_date
 
         with open(filename, 'wb') as f:
             f.write(response.body)
