@@ -18,25 +18,33 @@ class QuotesSpider(scrapy.Spider):
 
     def parse(self, response):
         logging.info('Begin parsing the response')
+
         # grab html that has a class of tweet-text for parsing
         all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
-        logging.info('ALL TWEET TEXT')
-        print(all_tweet_text)
 
         date = datetime.datetime.today().strftime('%Y-%m-%d')
         site = response.url.split("/")[-1]
+
+        # this is unique identifier for each crawl, it is used frequently as a key
         site_date = site + date
+
+        # assign to filename for output
         filename = '%s-twitter-crawl.html' % site_date
-        cleaned_array = []
-        all_cleaned_by_website = dict()
+
+
+        # loop and grab proper nouns
+        proper_nouns = []
         for tweet in all_tweet_text:
-            logging.info('INSIDE THE CLEANING LOOP')
-            if tweet[0].isalpha():
-                cleaned_array.append(tweet)
+            words = tweet.split()
 
-        all_cleaned_by_website.update({site_date : cleaned_array})
-        # possibly generate dict keyed on website name. push into large json
+            for word in words:
 
-        with open(filename, 'wb') as f:
-            f.write(all_cleaned_by_website)
-        self.log('Saved file %s' % filename)
+             if word[0].isupper():
+                 proper_nouns.append(word)
+
+        print('PROPER NOUNS ARRAY')
+        print(proper_nouns)
+
+        # with open(filename, 'wb') as f:
+        #     f.write(all_cleaned_by_website)
+        # self.log('Saved file %s' % filename)
