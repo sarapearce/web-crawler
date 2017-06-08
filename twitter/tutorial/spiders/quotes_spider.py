@@ -30,7 +30,7 @@ class QuotesSpider(scrapy.Spider):
         site_date = site + date
 
         # assign to filename for output
-        filename = '%s-twitter-crawl.html' % site_date
+        # filename = '%s-twitter-crawl.html' % site_date
 
 
         # loop, grab, and count proper nouns
