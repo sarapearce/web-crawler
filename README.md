@@ -1,7 +1,7 @@
 # crawler_v2
 Python web crawler for scraping data using Scrapy package.
 
-<em>What This Project Does<em>
+<em>What This Project Does</em>
 
 This is a Python web crawler. It crawls any website put into the url array in the quotes_spider.py file. It then takes the response from that crawl and parses the data for a json object to go to the front end for display. 
 
