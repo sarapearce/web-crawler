@@ -1,18 +1,18 @@
 # crawler_v2
 Python web crawler for scraping data using Scrapy package.
 
-What This Project Does 
+<em>What This Project Does<em>
 
 This is a Python web crawler. It crawls any website put into the url array in the quotes_spider.py file. It then takes the response from that crawl and parses the data for a json object to go to the front end for display. 
 
-Contributing Tech  
+<em>Contributing Tech</em>
 
-Architecture:  Python 3.5
+Architecture: Python 3.5
 Scrapy for the web crawler https://scrapy.org/
 Some dependencies for Scrapy
 Tools used: Scrapy docs, VirtualEnv, IntelliJ, Vagrant
 
-How to Run
+<em>How to Run</em>
 
 Open the quotes_spider.py file in twitter/tutorial/spiders/quotes_spider.py
 In line 10,  add the url for the twitter feed you would like crawled
