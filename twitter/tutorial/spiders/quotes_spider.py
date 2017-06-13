@@ -17,11 +17,9 @@ class QuotesSpider(scrapy.Spider):
 
     def parse(self, response):
         print('Begin parsing the response')
-        #print(response.url)
 
         # grab html that has a class of tweet-text for parsing
         all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
-        #print(all_tweet_text)
 
         # loop, grab, and count proper nouns
         proper_nouns = []
@@ -49,7 +47,7 @@ class QuotesSpider(scrapy.Spider):
 
 
         # get proper nouns with no repeats
-        distinct_proper_nouns = set(proper_nouns)
+        # distinct_proper_nouns = set(proper_nouns)
 
         noun_count = []
         counts_by_site_date = []
