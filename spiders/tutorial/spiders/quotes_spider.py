@@ -53,7 +53,7 @@ class QuotesSpider(scrapy.Spider):
 
         #a list of characters that come in the tweets, but need to be removed
         chars_to_remove = [".", "'", "'s", "Retweet"]
-
+        clean_word = ()
         for char in chars_to_remove:
             if char in word:
                 clean_word = word.replace(char, '')

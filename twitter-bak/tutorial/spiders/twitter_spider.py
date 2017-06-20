@@ -4,7 +4,7 @@ import scrapy
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "media_aggregate"
+    name = "twitter_spider"
 
     def start_requests(self):
         urls = [
@@ -32,7 +32,7 @@ class QuotesSpider(scrapy.Spider):
             words = tweet.split()
 
             for word in words:
-                use the uppercase first letter as the flag for a proper noun. todo: come up with more conditions for being a proper noun
+                #use the uppercase first letter as the flag for a proper noun.
                 if word[0].isupper():
                     # begin cleaning the word, write a function for this logic
                     if word.contains("'"):
