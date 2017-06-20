@@ -31,7 +31,7 @@ class QuotesSpider(scrapy.Spider):
             for word in words:
                 # use the uppercase first letter as the flag for a proper noun. later: come up with more conditions for being a proper noun
                 if word[0].isupper():
-                    clean_word = self.cleanWord(word)
+                    clean_word = self.clean-word(word)
                     print('CLEAN WORDS')
                     print(clean_word)
 
@@ -48,32 +48,32 @@ class QuotesSpider(scrapy.Spider):
 
         # print('PROPER NOUNS ARRAY')
         # print(proper_nouns)
-
-    def cleanWord(self, word):
-
-        #a list of characters that come in the tweets, but need to be removed
-        chars_to_remove = [".", "'", "'s", "Retweet"]
-        clean_word = ()
-        for char in chars_to_remove:
-            if char in word:
-                clean_word = word.replace(char, '')
-
-        cleaned_word = clean_word if clean_word else word
-
-        return cleaned_word
-
-    def getWordCount(self, word_array):
-        counts_list = ()
-        distinct_words = set(word_array)
-
-        for word in distinct_words:
-            word_count = word_array.count(word)
-            counts_list.append((word, word_count))
-        print('COUNTS LIST')
-        print(counts_list)
-        return counts_list
-
-
+    #
+    # def clean-word(self, word):
+    #
+    #     #a list of characters that come in the tweets, but need to be removed
+    #     chars_to_remove = [".", "'", "'s", "Retweet"]
+    #     clean_word = []
+    #     for char in chars_to_remove:
+    #         if char in word:
+    #             clean_word = word.replace(char, '')
+    #
+    #     cleaned_word = clean_word if clean_word else word
+    #
+    #     return cleaned_word
+    #
+    # def getWordCount(self, word_array):
+    #     counts_list = ()
+    #     distinct_words = set(word_array)
+    #
+    #     for word in distinct_words:
+    #         word_count = word_array.count(word)
+    #         counts_list.append((word, word_count))
+    #     print('COUNTS LIST')
+    #     print(counts_list)
+    #     return counts_list
+    #
+    #
 
 
         # print out the nouns by site

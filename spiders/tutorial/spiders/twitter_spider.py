@@ -32,28 +32,19 @@ class TwitterSpider(scrapy.Spider):
                 # use the uppercase first letter as the flag for a proper noun. later: come up with more conditions for being a proper noun
                 if word[0].isupper():
                     clean_word = self.cleanWord(word)
-                    print('CLEAN WORDS')
-                    print(clean_word)
+                    proper_nouns.append(clean_word)
 
-                    # clean_words.append(clean_word)
-
-
-                    #
-                    #         if not clean_word:
-                    #             clean_word = word
-                    #         proper_nouns.append(clean_word)
-                    #
-                    # obj_with_count = self.getWordCount(self, proper_nouns)
+               # this is wrong
+               # obj_with_count = self.getWordCount(self, proper_nouns)
 
 
-                    # print('PROPER NOUNS ARRAY')
-                    # print(proper_nouns)
+        # print('PROPER NOUNS ARRAY')
+        # print(proper_nouns)
 
     def cleanWord(self, word):
-
-        #a list of characters that come in the tweets, but need to be removed
-        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", ]
-        clean_word = ()
+        # cleaning process is not optimized, currently looking at every word and every character
+        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?"]
+        clean_word = []
         for char in chars_to_remove:
             if char in word:
                 clean_word = word.replace(char, '')
@@ -63,12 +54,12 @@ class TwitterSpider(scrapy.Spider):
         return cleaned_word
 
     def getWordCount(self, word_array):
-        counts_list = ()
+        counts_list = []
         distinct_words = set(word_array)
 
         for word in distinct_words:
             word_count = word_array.count(word)
-            counts_list.append((word, word_count))
+            counts_list.append([word, word_count])
         print('COUNTS LIST')
         print(counts_list)
         return counts_list
