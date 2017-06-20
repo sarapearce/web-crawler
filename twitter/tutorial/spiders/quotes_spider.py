@@ -29,12 +29,47 @@ class QuotesSpider(scrapy.Spider):
             words = tweet.split()
 
             for word in words:
-                # use the uppercase first letter as the flag for a proper noun. todo: come up with more conditions for being a proper noun
+                # use the uppercase first letter as the flag for a proper noun. later: come up with more conditions for being a proper noun
                 if word[0].isupper():
-                    proper_nouns.append(word)
-        
-        #print('PROPER NOUNS ARRAY')
-        #print(proper_nouns)
+                    # begin cleaning the word, write a function for this logic
+                    clean_word = self.cleanWord(word)
+                    print('CLEAN WORDS')
+                    print(clean_word)
+
+                    # clean_words.append(clean_word)
+
+
+        #
+        #         if not clean_word:
+        #             clean_word = word
+        #         proper_nouns.append(clean_word)
+        #
+        # obj_with_count = self.getWordCount(self, proper_nouns)
+
+
+        # print('PROPER NOUNS ARRAY')
+        # print(proper_nouns)
+
+    def cleanWord(self, word):
+
+        #a list of characters that come in the tweets, but need to be removed
+        chars_to_remove = [".", "'", "'s", "Retweet"]
+        for char in chars_to_remove:
+            if char in word:
+                clean_word = word.replace(char, '')
+
+        return clean_word
+
+    def getWordCount(self, word_array):
+        counts_list = ()
+        distinct_words = set(word_array)
+
+        for word in distinct_words:
+            word_count = word_array.count(word)
+            counts_list.append((word, word_count))
+        print('COUNTS LIST')
+        print(counts_list)
+        return counts_list
 
 
 
