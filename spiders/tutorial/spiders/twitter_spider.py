@@ -1,10 +1,10 @@
 import scrapy
-# import datetime
-# import json
+import datetime
+import json
 
 
-class QuotesSpider(scrapy.Spider):
-    name = "twitter_spider"
+class TwitterSpider(scrapy.Spider):
+    name = "twitter_crawl"
 
     def start_requests(self):
         urls = [
@@ -12,11 +12,8 @@ class QuotesSpider(scrapy.Spider):
             'https://twitter.com/CNN', 'https://twitter.com/ABC', 'https://twitter.com/CBSNews',
             'https://twitter.com/FoxNews', 'https://twitter.com/FoxBusiness', 'https://twitter.com/NBCNewsBusiness'
         ]
-        giant_list = []
         for url in urls:
-            yield giant_list.append(scrapy.Request(url=url, callback=self.parse))
-
-
+            yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         print('Begin parsing the response')
@@ -24,7 +21,7 @@ class QuotesSpider(scrapy.Spider):
         # grab html that has a class of tweet-text for parsing
         all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
 
-        # begin loop, grab and count proper nouns
+        # loop, grab, and count proper nouns
         proper_nouns = []
 
         for tweet in all_tweet_text:
@@ -32,21 +29,50 @@ class QuotesSpider(scrapy.Spider):
             words = tweet.split()
 
             for word in words:
-                #use the uppercase first letter as the flag for a proper noun.
+                # use the uppercase first letter as the flag for a proper noun. later: come up with more conditions for being a proper noun
                 if word[0].isupper():
-                    # begin cleaning the word, write a function for this logic
-                    if word.contains("'"):
-                        clean_word = word.trim("'")
-                    if word.contains("."):
-                        clean_word = word.trim(".")
+                    clean_word = self.cleanWord(word)
+                    print('CLEAN WORDS')
+                    print(clean_word)
 
-                if not clean_word:
-                    clean_word = word
-                proper_nouns.append(clean_word)
+                    # clean_words.append(clean_word)
 
 
-        print('PROPER NOUNS ARRAY')
-        print(proper_nouns)
+                    #
+                    #         if not clean_word:
+                    #             clean_word = word
+                    #         proper_nouns.append(clean_word)
+                    #
+                    # obj_with_count = self.getWordCount(self, proper_nouns)
+
+
+                    # print('PROPER NOUNS ARRAY')
+                    # print(proper_nouns)
+
+    def cleanWord(self, word):
+
+        #a list of characters that come in the tweets, but need to be removed
+        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", ]
+        clean_word = ()
+        for char in chars_to_remove:
+            if char in word:
+                clean_word = word.replace(char, '')
+
+        cleaned_word = clean_word if clean_word else word
+
+        return cleaned_word
+
+    def getWordCount(self, word_array):
+        counts_list = ()
+        distinct_words = set(word_array)
+
+        for word in distinct_words:
+            word_count = word_array.count(word)
+            counts_list.append((word, word_count))
+        print('COUNTS LIST')
+        print(counts_list)
+        return counts_list
+
 
 
 
