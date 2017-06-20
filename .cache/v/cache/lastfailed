@@ -1,0 +1,5 @@
+{
+  "lib/python3.5/site-packages/wheel/test/test_basic.py::test_pydist": true,
+  "lib/python3.5/site-packages/wheel/test/test_tool.py::test_keygen": true,
+  "test_sample.py::test_answer": true
+}
