@@ -34,9 +34,12 @@ class TwitterSpider(scrapy.Spider):
                     clean_word = self.cleanWord(word)
                     proper_nouns.append(clean_word)
 
-               # this is wrong
-               # obj_with_count = self.getWordCount(self, proper_nouns)
+        list_with_count = self.getWordCount(proper_nouns)
+        print(list_with_count)
 
+        # date = datetime.datetime.today().strftime('%Y-%m-%d')
+        # site = response.url.split("/")[-1]
+        # index = site + '-' + date
 
         # print('PROPER NOUNS ARRAY')
         # print(proper_nouns)
@@ -53,15 +56,14 @@ class TwitterSpider(scrapy.Spider):
 
         return cleaned_word
 
-    def getWordCount(self, word_array):
+    def getWordCount(self, word_list):
         counts_list = []
-        distinct_words = set(word_array)
+        distinct_words = set(word_list)
 
         for word in distinct_words:
-            word_count = word_array.count(word)
+            word_count = word_list.count(word)
             counts_list.append([word, word_count])
-        print('COUNTS LIST')
-        print(counts_list)
+
         return counts_list
 
 
