@@ -23,7 +23,7 @@ class TwitterSpider(scrapy.Spider):
 
         # loop, grab, and count proper nouns
         proper_nouns = []
-
+        giant_list = []
         for tweet in all_tweet_text:
             # break into words by splitting on whitespace, which is the default when nothing is indicated
             words = tweet.split()
@@ -35,11 +35,17 @@ class TwitterSpider(scrapy.Spider):
                     proper_nouns.append(clean_word)
 
         list_with_count = self.getWordCount(proper_nouns)
-        print(list_with_count)
 
-        # date = datetime.datetime.today().strftime('%Y-%m-%d')
-        # site = response.url.split("/")[-1]
-        # index = site + '-' + date
+        date = datetime.datetime.today().strftime('%Y-%m-%d')
+        site = response.url.split("/")[-1]
+        index = site + '-' + date
+
+        # print(list_with_count)
+        giant_list.append(list_with_count)
+        print(index)
+        print(giant_list)
+
+
 
         # print('PROPER NOUNS ARRAY')
         # print(proper_nouns)
@@ -66,21 +72,6 @@ class TwitterSpider(scrapy.Spider):
 
         return counts_list
 
-
-
-
-        # print out the nouns by site
-        # nouns_by_site = []
-        # date = datetime.datetime.today().strftime('%Y-%m-%d')
-        # site = response.url.split("/")[-1]
-        # index = site + '-' + date
-        # nouns_by_site.append((index, proper_nouns))
-        #
-        #
-        # print(nouns_by_site)
-
-        # date = datetime.datetime.today().strftime('%Y-%m-%d')
-        # site = response.url.split("/")[-1]
 
 
 
