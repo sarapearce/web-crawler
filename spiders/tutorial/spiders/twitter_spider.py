@@ -12,43 +12,37 @@ class TwitterSpider(scrapy.Spider):
             'https://twitter.com/CNN', 'https://twitter.com/ABC', 'https://twitter.com/CBSNews',
             'https://twitter.com/FoxNews', 'https://twitter.com/FoxBusiness', 'https://twitter.com/NBCNewsBusiness'
         ]
+
+        # current issue: i need the response from this loop to get aggregate counts rather than crawl counts
+        # meaning I want to take the returned data and update a dict with it.
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         print('Begin parsing the response')
 
-        # grab html that has a class of tweet-text for parsing
+        # grab the text of the tweet, for every tweet on the page
         all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
 
-        # loop, grab, and count proper nouns
+        # loop, grab, and count proper nouns out of the tweets
         proper_nouns = []
-        giant_list = []
+        cleaned_words = {}
         for tweet in all_tweet_text:
-            # break into words by splitting on whitespace, which is the default when nothing is indicated
+            # break into words by splitting on whitespace
             words = tweet.split()
 
             for word in words:
-                # use the uppercase first letter as the flag for a proper noun. later: come up with more conditions for being a proper noun
+                # use the uppercase first letter as the flag for a proper noun for now
                 if word[0].isupper():
                     clean_word = self.cleanWord(word)
                     proper_nouns.append(clean_word)
 
-        list_with_count = self.getWordCount(proper_nouns)
+        key = self.buildKey(response.url)
+        cleaned_words[key] = proper_nouns
 
-        date = datetime.datetime.today().strftime('%Y-%m-%d')
-        site = response.url.split("/")[-1]
-        index = site + '-' + date
+        return cleaned_words
 
-        # print(list_with_count)
-        giant_list.append(list_with_count)
-        print(index)
-        print(giant_list)
-
-
-
-        # print('PROPER NOUNS ARRAY')
-        # print(proper_nouns)
+        # list_with_count = self.getWordCount(proper_nouns)
 
     def cleanWord(self, word):
         # cleaning process is not optimized, currently looking at every word and every character
@@ -72,8 +66,12 @@ class TwitterSpider(scrapy.Spider):
 
         return counts_list
 
+    def buildKey(self, url):
+        date = datetime.datetime.today().strftime('%Y-%m-%d')
+        site = url.split("/")[-1]
+        key = site + '-' + date
 
-
+        return key
 
 
         # write output to a file
