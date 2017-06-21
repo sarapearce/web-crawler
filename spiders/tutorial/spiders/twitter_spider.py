@@ -5,6 +5,7 @@ import json
 
 class TwitterSpider(scrapy.Spider):
     name = "twitter_crawl"
+    mega_list = []
 
     def start_requests(self):
         urls = [
@@ -17,6 +18,16 @@ class TwitterSpider(scrapy.Spider):
         # meaning I want to take the returned data and update a dict with it.
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
+
+        # print(self.mega_list)
+        # nouns_with_counts = {}
+        # unique_nouns = set(self.mega_list)
+        # # print(unique_nouns)
+        # for noun in unique_nouns:
+        #     nouns_with_counts.update('noun', self.getWordCount(noun))
+
+
+        # print(nouns_with_counts)
 
     def parse(self, response):
         print('Begin parsing the response')
@@ -35,12 +46,13 @@ class TwitterSpider(scrapy.Spider):
                 # use the uppercase first letter as the flag for a proper noun for now
                 if word[0].isupper():
                     clean_word = self.cleanWord(word)
-                    proper_nouns.append(clean_word)
+                    self.mega_list.append(clean_word)
 
-        key = self.buildKey(response.url)
-        cleaned_words[key] = proper_nouns
+        print(self.mega_list)
+        # key = self.buildKey(response.url)
+        # cleaned_words[key] = proper_nouns
 
-        return cleaned_words
+        # return cleaned_words
 
         # list_with_count = self.getWordCount(proper_nouns)
 
@@ -56,15 +68,13 @@ class TwitterSpider(scrapy.Spider):
 
         return cleaned_word
 
-    def getWordCount(self, word_list):
-        counts_list = []
-        distinct_words = set(word_list)
-
+    def getWordCount(self):
+        distinct_words = set(self.mega_list)
+        word_count = ''
         for word in distinct_words:
-            word_count = word_list.count(word)
-            counts_list.append([word, word_count])
+            word_count = self.mega_list.count(word)
 
-        return counts_list
+        return word_count
 
     def buildKey(self, url):
         date = datetime.datetime.today().strftime('%Y-%m-%d')
