@@ -14,20 +14,8 @@ class TwitterSpider(scrapy.Spider):
             'https://twitter.com/FoxNews', 'https://twitter.com/FoxBusiness', 'https://twitter.com/NBCNewsBusiness'
         ]
 
-        # current issue: i need the response from this loop to get aggregate counts rather than crawl counts
-        # meaning I want to take the returned data and update a dict with it.
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
-
-        # print(self.mega_list)
-        # nouns_with_counts = {}
-        # unique_nouns = set(self.mega_list)
-        # # print(unique_nouns)
-        # for noun in unique_nouns:
-        #     nouns_with_counts.update('noun', self.getWordCount(noun))
-
-
-        # print(nouns_with_counts)
 
     def parse(self, response):
         print('Begin parsing the response')
@@ -36,8 +24,6 @@ class TwitterSpider(scrapy.Spider):
         all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
 
         # loop, grab, and count proper nouns out of the tweets
-        proper_nouns = []
-        cleaned_words = {}
         for tweet in all_tweet_text:
             # break into words by splitting on whitespace
             words = tweet.split()
@@ -48,17 +34,14 @@ class TwitterSpider(scrapy.Spider):
                     clean_word = self.cleanWord(word)
                     self.mega_list.append(clean_word)
 
-        print(self.mega_list)
-        # key = self.buildKey(response.url)
-        # cleaned_words[key] = proper_nouns
+        # print(self.mega_list)
+        list_with_count = self.countWords()
 
-        # return cleaned_words
-
-        # list_with_count = self.getWordCount(proper_nouns)
+        print(list_with_count)
 
     def cleanWord(self, word):
         # cleaning process is not optimized, currently looking at every word and every character
-        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?"]
+        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-"]
         clean_word = []
         for char in chars_to_remove:
             if char in word:
@@ -68,20 +51,21 @@ class TwitterSpider(scrapy.Spider):
 
         return cleaned_word
 
-    def getWordCount(self):
+    def countWords(self):
         distinct_words = set(self.mega_list)
-        word_count = ''
+        word_count = []
         for word in distinct_words:
-            word_count = self.mega_list.count(word)
+            count = self.mega_list.count(word)
+            word_count.append((word, count))
 
         return word_count
 
-    def buildKey(self, url):
-        date = datetime.datetime.today().strftime('%Y-%m-%d')
-        site = url.split("/")[-1]
-        key = site + '-' + date
-
-        return key
+    # def buildKey(self, url):
+    #     date = datetime.datetime.today().strftime('%Y-%m-%d')
+    #     site = url.split("/")[-1]
+    #     key = site + '-' + date
+    #
+    #     return key
 
 
         # write output to a file
