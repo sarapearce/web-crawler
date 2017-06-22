@@ -39,9 +39,15 @@ class TwitterSpider(scrapy.Spider):
 
         print(list_with_count)
 
+        # next: loop mega_list and remove all words whose count is 1
+
+        # convert to json, and send that shit up
+
     def cleanWord(self, word):
         # cleaning process is not optimized, currently looking at every word and every character
-        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-"]
+             # the string ed is in the list because for some unknown reason parsing gives me a ton of ed words, we dont want these.
+             # i will figure out why there is an ed later. for now, hack is to add it to cleaning list
+        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-", "ed"]
         clean_word = []
         for char in chars_to_remove:
             if char in word:
