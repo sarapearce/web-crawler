@@ -1,11 +1,12 @@
 import scrapy
-import datetime
 import json
 
 
 class TwitterSpider(scrapy.Spider):
     name = "twitter_crawl"
     mega_list = []
+    urls_count = ''
+    i = 0
 
     def start_requests(self):
         urls = [
@@ -14,10 +15,17 @@ class TwitterSpider(scrapy.Spider):
             'https://twitter.com/FoxNews', 'https://twitter.com/FoxBusiness', 'https://twitter.com/NBCNewsBusiness'
         ]
 
+        self.urls_count = len(urls)
+
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
+
+        # NOTE: currently using a counter in here as a fix for not being able to access the generators in start_requests
+        # and unable to replace the yield without breaking Scrapy.
+
+        counter = self.i + 1
         print('Begin parsing the response')
 
         # grab the text of the tweet, for every tweet on the page
@@ -34,21 +42,29 @@ class TwitterSpider(scrapy.Spider):
                     clean_word = self.cleanWord(word)
                     self.mega_list.append(clean_word)
 
-        # print(self.mega_list)
-        list_with_count = self.countWords()
+        if counter == self.urls_count:
+            json = self.buildJSON()
 
-        print(list_with_count)
+        # print(json)
 
-        # next: loop mega_list and remove all words whose count is 1
+    def buildJSON(self):
+        words_with_counts = self.countWords()
+        final_list = []
+        for word_count in words_with_counts:
+            if str(word_count[1]) != '1':
+                final_list.append(word_count)
 
-        # convert to json, and send that shit up
+        print(final_list)
+        encoded_json = json.dumps(json)
+        return encoded_json
+
+        # json encode, and send that shit up
 
     def cleanWord(self, word):
         # cleaning process is not optimized, currently looking at every word and every character
-             # the string ed is in the list because for some unknown reason parsing gives me a ton of ed words, we dont want these.
-             # i will figure out why there is an ed later. for now, hack is to add it to cleaning list
-        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-", "ed"]
+        #NOTE: Next steps to improve cleaning: remove pronouns and articles, fix Retweet, its not getting removed
         clean_word = []
+        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-", "ed"]
         for char in chars_to_remove:
             if char in word:
                 clean_word = word.replace(char, '')
