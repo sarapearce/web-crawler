@@ -22,10 +22,9 @@ class TwitterSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        # NOTE: currently using a counter in here as a fix for not being able to access the generators in start_requests
+        # currently using a counter in here as a fix for not being able to access the generators in start_requests
         # and unable to replace the yield without breaking Scrapy.
-
-        counter = self.i + 1
+        self.i += 1
         print('Begin parsing the response')
 
         # grab the text of the tweet, for every tweet on the page
@@ -42,7 +41,8 @@ class TwitterSpider(scrapy.Spider):
                     clean_word = self.cleanWord(word)
                     self.mega_list.append(clean_word)
 
-        if counter == self.urls_count:
+        # if we are on the last url, then build the json
+        if self.i == self.urls_count:
             json = self.buildJSON()
 
         # print(json)
@@ -55,8 +55,8 @@ class TwitterSpider(scrapy.Spider):
                 final_list.append(word_count)
 
         print(final_list)
-        encoded_json = json.dumps(json)
-        return encoded_json
+        # encoded_json = json.dumps(json)
+        # return encoded_json
 
         # json encode, and send that shit up
 
