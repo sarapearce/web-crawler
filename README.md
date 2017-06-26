@@ -16,7 +16,7 @@ Tools used: Python, Scrapy, VirtualEnv, IntelliJ, Vagrant <br>
 
 <code>cd backend/spiders/tutorial/spiders</code> <br>
 open <code>twitter_spider.py</code> <br>
-go back up a directory <code>cd ../</code>
+go back up a directory <code>cd ../</code> <br>
 Around line 10,  add the url(s) for the twitter feed you would like crawled <br>
 Run <code>scrapy crawl twitter_crawl</code>. <br>
 
