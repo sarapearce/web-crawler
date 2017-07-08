@@ -12,7 +12,7 @@ Tools used: Python, Scrapy, VirtualEnv, IntelliJ, Vagrant <br>
 
 <h3>How to Run</h3>
 
-<code>cd backend/spiders/tutorial/spiders</code> <br>
+<code>cd backend/spiders/tutorial/spiders</code> <br> 
 <code>vi twitter_spider.py</code> <br>
 Around line 10,  add the url(s) for the twitter feed(s) you would like crawled <br>
 go back up a directory <code>cd ..</code> <br>
