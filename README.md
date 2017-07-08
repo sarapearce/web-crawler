@@ -1,4 +1,3 @@
-Python web crawler for scraping data using Scrapy package.
 
 <h3>What This Project Does</h3>
 
