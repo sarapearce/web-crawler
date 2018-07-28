@@ -1,18 +1,18 @@
 import scrapy
 import json
+from array import array
+# from numpy import as np
 
 
 class TwitterSpider(scrapy.Spider):
     name = "twitter_crawl"
-    mega_list = []
+
     urls_count = ''
     i = 0
 
     def start_requests(self):
         urls = [
-            'https://twitter.com/nytimes', 'https://twitter.com/AP', 'https://twitter.com/AJEnglish',
-            'https://twitter.com/CNN', 'https://twitter.com/ABC', 'https://twitter.com/CBSNews',
-            'https://twitter.com/FoxNews', 'https://twitter.com/FoxBusiness', 'https://twitter.com/NBCNewsBusiness'
+            'https://reddit.com/r/ProgrammerHumor'
         ]
 
         self.urls_count = len(urls)
@@ -28,22 +28,41 @@ class TwitterSpider(scrapy.Spider):
         print('Begin parsing the response')
 
         # grab the text of the tweet, for every tweet on the page
-        all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
+        # all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
+        post_data = {}
+        post_data['user'] = response.xpath("//a[@class='author']//text()").extract()
+        post_data['comment'] = response.xpath("//a[@class='fQTdVB']//text()").extract()
+        post_data['post_title'] = response.xpath("//a[@id='eHkfHQ']//text()").extract()
+        post_data['comment_time'] = response.xpath("//a[@id='eHkfHQ']//text()").extract()
+        post_data['url'] = response.url
 
-        # loop, grab, and count proper nouns out of the tweets
-        for tweet in all_tweet_text:
-            # break into words by splitting on whitespace
-            words = tweet.split()
+        print(post_data);
 
-            for word in words:
-                # use the uppercase first letter as the flag for a proper noun for now
-                if word[0].isupper():
-                    clean_word = self.cleanWord(word)
-                    self.mega_list.append(clean_word)
+        # # write output to a file
+        # filename = resp
+        # with open(filename, 'wb') as f:
+        #     f.write(post_data)
+        # self.log('Saved file %s' % filename)
+
+
+
+
+        # # loop, grab, and count proper nouns out of the tweets
+        # for tweet in all_tweet_text:
+        #     # break into words by splitting on whitespace
+        #     words = tweet.split()
+        #
+        #     for word in words:
+        #         # use the uppercase first letter as the flag for a proper noun for now
+        #         if word[0].isupper():
+        #             clean_word = self.cleanWord(word)
+        #             self.mega_list.append(clean_word)
+
+
 
         # if we are on the last url, then build the json
-        if self.i == self.urls_count:
-            json = self.buildJSON()
+        # if self.i == self.urls_count:
+        #     json = self.buildJSON()
 
         # print(json)
 
@@ -62,7 +81,7 @@ class TwitterSpider(scrapy.Spider):
 
     def cleanWord(self, word):
         # cleaning process is not optimized, currently looking at every word and every character
-        #NOTE: Next steps to improve cleaning: remove pronouns and articles, fix Retweet, its not getting removed
+        # Next steps to improve cleaning: remove pronouns and articles, fix Retweet, its not getting removed
         clean_word = []
         chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-", "ed"]
         for char in chars_to_remove:
@@ -72,15 +91,15 @@ class TwitterSpider(scrapy.Spider):
         cleaned_word = clean_word if clean_word else word
 
         return cleaned_word
-
-    def countWords(self):
-        distinct_words = set(self.mega_list)
-        word_count = []
-        for word in distinct_words:
-            count = self.mega_list.count(word)
-            word_count.append((word, count))
-
-        return word_count
+    #
+    # def countWords(self):
+    #     distinct_words = set(self.mega_list)
+    #     word_count = []
+    #     for word in distinct_words:
+    #         count = self.mega_list.count(word)
+    #         word_count.append((word, count))
+    #
+    #     return word_count
 
     # def buildKey(self, url):
     #     date = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -88,12 +107,3 @@ class TwitterSpider(scrapy.Spider):
     #     key = site + '-' + date
     #
     #     return key
-
-
-        # write output to a file
-        # filename = resp
-        # with open(filename, 'wb') as f:
-        #     f.write(counts_by_site_date)
-        # self.log('Saved file %s' % filename)
-
-
