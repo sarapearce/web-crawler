@@ -29,10 +29,10 @@ class TwitterSpider(scrapy.Spider):
         # grab the text of the tweet, for every tweet on the page
         # all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
         post_data = {}
-        post_data['user'] = response.css("p").extract()
-        post_data['comment'] = response.xpath("//a[@class='fQTdVB']/text()").extract()
-        post_data['post_title'] = response.xpath("//a[@class='eHkfHQ']/text()").extract()
-        post_data['comment_time'] = response.xpath("//a[@class='eHkfHQ']/text()").extract()
+        post_data['user'] = response.css(".doXpDd *::text").extract()
+        post_data['comment'] = response.css(".iEJDri *::text").extract()
+        post_data['post_title'] = response.css(".gVEXqn *::text").extract()
+        post_data['comment_time'] = response.css(".eHkfHQ span *::text").extract()
         post_data['url'] = response.url
 
         print(post_data);
