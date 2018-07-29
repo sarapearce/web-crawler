@@ -1,5 +1,6 @@
 import scrapy
 import json
+import csv
 # from numpy import as np
 
 
@@ -35,16 +36,24 @@ class TwitterSpider(scrapy.Spider):
         post_data['comment_time'] = response.css(".eHkfHQ span *::text").extract()
         post_data['url'] = response.url
 
-        print(post_data);
+        print(post_data)
 
-        # # write output to a file
-        # filename = resp
+
+        # write output to a file
+
         # with open(filename, 'wb') as f:
         #     f.write(post_data)
-        # self.log('Saved file %s' % filename)
+
+        filename = 'single_post_data.csv'
+        with open(filename, 'wb') as csv_file:
+            writer = csv.writer(csv_file)
+            for key, value in post_data.items():
+                writer.writerow([key, value])
+
+        self.log('Saved file %s' % filename)
 
 
-
+        # list(d.values())
 
         # # loop, grab, and count proper nouns out of the tweets
         # for tweet in all_tweet_text:
@@ -56,8 +65,6 @@ class TwitterSpider(scrapy.Spider):
         #         if word[0].isupper():
         #             clean_word = self.cleanWord(word)
         #             self.mega_list.append(clean_word)
-
-
 
         # if we are on the last url, then build the json
         # if self.i == self.urls_count:
@@ -82,7 +89,8 @@ class TwitterSpider(scrapy.Spider):
         # cleaning process is not optimized, currently looking at every word and every character
         # Next steps to improve cleaning: remove pronouns and articles, fix Retweet, its not getting removed
         clean_word = []
-        chars_to_remove = [".", "'", "'s", "Retweet", ",", ":", ";", "?", "!", "-", "ed"]
+        chars_to_remove = [".", "'", "'s", "Retweet",
+                           ",", ":", ";", "?", "!", "-", "ed"]
         for char in chars_to_remove:
             if char in word:
                 clean_word = word.replace(char, '')
