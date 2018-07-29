@@ -1,6 +1,7 @@
 import scrapy
 import json
 import csv
+import pandas as pd
 # from numpy import as np
 
 
@@ -11,9 +12,8 @@ class TwitterSpider(scrapy.Spider):
     i = 0
 
     def start_requests(self):
-        urls = [
-            'https://www.reddit.com/r/ProgrammerHumor/comments/92mzqt/i_always_knew_that_image_processing_was_my_strong/'
-        ]
+        urls = ['https://www.reddit.com/r/ProgrammerHumor/comments/92mzqt/i_always_knew_that_image_processing_was_my_strong/',"https://www.reddit.com/r/FulfillmentByAmazon/comments/92jc38/amazon_bought_one_of_my_items/","https://www.reddit.com/r/Granblue_en/comments/92bv83/progress_and_achievement_thread_july_27_2018/","https://www.reddit.com/r/piano/comments/925url/is_it_possible_to_get_to_the_point_where_you_can/","https://www.reddit.com/r/functionalprint/comments/92dxp7/modelled_and_printed_a_smartphone_hopder_for_my/", "https://www.reddit.com/r/Browns/comments/92njm0/meme_spotted_outside_the_cleveland_browns/"]
+
 
         self.urls_count = len(urls)
 
@@ -30,47 +30,50 @@ class TwitterSpider(scrapy.Spider):
         # grab the text of the tweet, for every tweet on the page
         # all_tweet_text = response.xpath('//*[contains(@class, "tweet-text")]/text()').extract()
         post_data = {}
-        post_data['user'] = response.css(".doXpDd *::text").extract()
-        post_data['comment'] = response.css(".iEJDri *::text").extract()
-        post_data['post_title'] = response.css(".gVEXqn *::text").extract()
-        post_data['comment_time'] = response.css(".eHkfHQ span *::text").extract()
+        # post_data_row = {}
+        # post_data_row[]
         post_data['url'] = response.url
+        post_data['user'] = response.css(".doXpDd *::text").extract()
+        additional_users = response.css(".JcfKy *::text").extract()
+
+        post_time = response.css("._3jOxDPIQ0KaOWpzvSQo-1s *::text").extract()
+
+
+
+        # print('ADDITIONAL USERS')
+        # print(additional_users)
+        post_data['user'].extend(additional_users)
+        post_data['comment'] = response.css(".iEJDri *::text").extract()
+        # post_data['post_title'] = response.css(".gVEXqn *::text").extract()
+        post_data['comment_time'] = response.css(".eHkfHQ span *::text").extract()
+
+
+        # print('COMMENT ARRAY LENGTH BEFORE')
+        # print(len(post_data['comment']))
+
+        if len(post_data['comment']) > len(post_data['user']):
+            len_user_list = len(post_data['user'])
+            len_comments_list = len(post_data['comment'])
+            del post_data['comment'][len_user_list:len_comments_list]
+
+
+
+        # print('USER ARRAY LENGTH')
+        # print(len(post_data['user']))
+        # print(post_data['user'])
+        #
+        # print('COMMENT ARRAY LENGTH AFTER')
+        # print(len(post_data['comment']))
+        # print(post_data['comment'])
+        #
+        # print('COMMENT TIME ARRAY LENGTH')
+        # print(len(post_data['comment_time']))
+        # print(post_data['comment'])
 
         print(post_data)
 
-
-        # write output to a file
-
-        # with open(filename, 'wb') as f:
-        #     f.write(post_data)
-
-        filename = 'single_post_data.csv'
-        with open(filename, 'wb') as csv_file:
-            writer = csv.writer(csv_file)
-            for key, value in post_data.items():
-                writer.writerow([key, value])
-
-        self.log('Saved file %s' % filename)
-
-
-        # list(d.values())
-
-        # # loop, grab, and count proper nouns out of the tweets
-        # for tweet in all_tweet_text:
-        #     # break into words by splitting on whitespace
-        #     words = tweet.split()
-        #
-        #     for word in words:
-        #         # use the uppercase first letter as the flag for a proper noun for now
-        #         if word[0].isupper():
-        #             clean_word = self.cleanWord(word)
-        #             self.mega_list.append(clean_word)
-
-        # if we are on the last url, then build the json
-        # if self.i == self.urls_count:
-        #     json = self.buildJSON()
-
-        # print(json)
+        df = pd.DataFrame.from_dict(post_data)
+        df.to_csv('single_post_data.csv', index = False)
 
     def buildJSON(self):
         words_with_counts = self.countWords()
