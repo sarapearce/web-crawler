@@ -7,8 +7,7 @@ This is a Python web crawler. It crawls any website put into the url array in a 
 
 Architecture: Python 3.5
 Scrapy for the web crawler https://scrapy.org/ <br>
-Some dependencies (~5) for Scrapy <br>
-Tools used: Python, Scrapy, VirtualEnv, IntelliJ, Vagrant <br>
+Tools used: Python, Scrapy <br>
 
 <h3>How to Run</h3>
 
