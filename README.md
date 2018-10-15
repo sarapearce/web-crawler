@@ -17,4 +17,4 @@ Around line 10,  add the url(s) for the twitter feed(s) you would like crawled <
 go back up a directory <code>cd ..</code> <br>
 Run <code>scrapy crawl twitter_crawl</code>. <br>
 
-The frontend to this project can be found at: https://github.com/sarapearce/crawler-frontend. 
+
