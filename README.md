@@ -18,5 +18,5 @@ go back up a directory <code>cd ..</code> <br>
 Run <code>scrapy crawl twitter_crawl</code>. <br>
 
 <h3>Support Materials and Initial Codebases</h3>
-https://doc.scrapy.org/en/latest/intro/examples.html
+https://doc.scrapy.org/en/latest/intro/tutorial.html
 
