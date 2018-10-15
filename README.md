@@ -1,7 +1,7 @@
 
 <h3>What This Project Does</h3>
 
-This is a Python web crawler. It crawls any website put into the url array in a <code>my_spider_name.py</code> file. It then takes the response from that crawl and parses the data for a json object to go to the front end for display.
+This is a Python web crawler that I use to scrape data from any webpage where scraping is allowed. It crawls any website put into the url array in a <code>my_spider_name.py</code> file. It then takes the response from that crawl and parses the data for a json object to go to the front end for display.
 
 <h3>Contributing Tech</h3>
 
@@ -17,4 +17,6 @@ Around line 10,  add the url(s) for the twitter feed(s) you would like crawled <
 go back up a directory <code>cd ..</code> <br>
 Run <code>scrapy crawl twitter_crawl</code>. <br>
 
+<h3>Support Materials and Initial Codebases</h3>
+https://doc.scrapy.org/en/latest/intro/examples.html
 
