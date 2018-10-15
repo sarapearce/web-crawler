@@ -7,7 +7,7 @@ This is a Python web crawler that I use to scrape data from any webpage where sc
 
 Architecture: Python 3.5
 Scrapy for the web crawler https://scrapy.org/ <br>
-Tools used: Python, Scrapy <br>
+<br>
 
 <h3>How to Run</h3>
 
